@@ -2,16 +2,7 @@
 A collection of code used in the analysis of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation"
 https://doi.org/10.1101/2023.10.20.563336
 ---
----
-title: "post-trxn"
-author: "Pieter Spealman"
-date: "`r Sys.Date()`"
-output: html_document
----
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## Introduction
 This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation". 
