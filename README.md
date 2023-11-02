@@ -5,7 +5,7 @@ https://doi.org/10.1101/2023.10.20.563336
 
 
 ## Introduction
-This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation". 
+This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation". All files are available in this repository, download unzip, and move all files into a 'data' directory to use the commands provided here.
 
 ### Expression Alignment to Ensembl reference genome and reads per gene
 
