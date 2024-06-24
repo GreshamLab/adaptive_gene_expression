@@ -77,10 +77,11 @@ analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
 ```
 
 ### Make Heatmap and cluster (Figure 2)
-Takes 
+Takes Unit transformed expression data, builds 
 
 ```{}
 build_expression_object_l1_v1.0.py
+heatmap_v2_l1_public.r
 
 # input
 data/analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
@@ -89,6 +90,7 @@ data/analyses/ms/Perseus_DA_Welchs_t-test_wFDR_edit.txt
 # output
 data/output/unit_object_level_Unit_l1_tests.tab
 figures/unit_object_select_24k_clust.pdf
+figures/_pheatmap_all_24_score.pdf
 ```
 
 ### Calculate Exp_RNA from Obs_RNA
@@ -98,9 +100,9 @@ To calculate change in transcription efficiency we first calculate the expected 
 make_exp_rna_from_obs_rna.py
 
 # these rely on: 
-data/chemostat_gene_relative_copy_number.tsv
-data/Transposable_elements_rDNA.txt
-data/RNA_unnormed_read_counts_by_gene.tsv
+metadata/chemostat_gene_relative_copy_number.tsv
+metadata/Transposable_elements_rDNA.txt
+data/analyses/chemostat_expression/RNA_unnormed_read_counts_by_gene.tsv
 
 #this produces: 
 data/combined_coverage_table_expected.tsv
@@ -112,85 +114,53 @@ To identify genes with different relative abundances DESeq2 was ran on copy-numb
 ```{}
 DESeq_difExp_RNA_v1.1.R
 
-# this relies on: 
+# input
 data/combined_coverage_table_expected.tsv
 
-#this produces: 
+# output
 data/DESeq_Exp_RNA_DGY1657_DGY1726.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1735.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1741.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1743.txt
 ```
 
-### Make robust scale heatmap
-```{}
-make_multilevel_heatmaps.py
-
-# these rely on: 
-data/chemostat_gene_relative_copy_number.tsv
-data/DGY1726_global_expression.tsv
-data/DGY1735_global_expression.tsv
-data/DGY1741_global_expression.tsv
-data/DGY1743_global_expression.tsv
-
-# these produce:
-heatmap_CNV_map.pdf
-Log2FC_map_GR_RNA_chrXI.pdf
-Log2FC_map_GR_RPF_chrXI.pdf
-Log2FC_map_GR_MS_chrXI.pdf
-```
-
-### Efficiency analysis 
-One of the core metrics in the analysis is the efficiency ratios. A conceptual extension of translational efficiency (ie. RPF/RNA) to include post-translational ratios like (Protein/RPF).
+### Perform Fisher Exact Test on translation efficiency ratios
+Calculate mediansof replicates for TPM normalized RPF, RNA in both Evolved and Ancestor. Use subsequent ratios to calculate FET and p-values.
 
 ```{}
-rpf_tpm_and_ms_FET_v3.py
+calc_teff_v2.py
 
-# this relies on:
-data/aa_protein_lengths.tsv
-data/Transposable_elements_rDNA.txt
-data/DGY1726_v_DGY1765_wCON_wBatch_QN_p0.01.txt
-data/DGY1735_v_DGY1765_wCON_wBatch_QN_p0.01.txt
-data/DGY1741_v_DGY1765_wCON_wBatch_QN_p0.01.txt
-data/DGY1743_v_DGY1765_wCON_wBatch_QN_p0.01.txt
-#
-data/DESeq_Obs_RNA_DGY1657_DGY1726.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1735.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1741.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1743.txt
-#
-data/DESeq_Obs_RPF_DGY1657_DGY1726.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1735.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1741.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1743.txt
-#
-data/DESeq_Exp_RNA_DGY1657_DGY1726.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1735.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1741.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1743.txt
-#
-Perseus_DA_Welchs_t-test_wFDR.txt
+# input
+analyses/efficiency/ratio_df_Unit_v13.tab
 
-#this produces:
-data/ms_counts_expression.tsv
-data/ms_to_rna_ratio_1e2.tsv
-data/ms_to_rpf_ratio_1e2.tsv
-data/rpf_to_rna_ratio_1e2.tsv
-#
-data/dosage_compensation_FET_rna_v_rna.csv
-data/dosage_compensation_FET_rpf_v_rna.csv
-data/dosage_compensation_FET_ms_v_rna.csv
-data/dosage_compensation_FET_ms_v_rpf.csv
-#
-temp_transcript_eff_cnn.csv
-
-#Figures:
-data/ms_to_rna_efficiency_pval_ratio.pdf
-data/ms_to_rpf_efficiency_pval_ratio.pdf
-data/rpf_to_rna_efficiency_pval_ratio.pdf
-data/rna_rna_efficiency_pval_ratio.pdf
-data/DGY1726_rna_v_DGY1657_rna.pdf
+#output
+analyses/efficiency/Unit_v13_teff_results.tab
 ```
+
+### Make Figure 2B, 2C
+Generates plots for the 'copy number correction' figures (Figure 2B, 2c). Also makes supplementary files that summarize DESeq2 results for Observed RNA, Observed RPF, and copy-number corrected Expected RNA. 
+```{}
+plot_fig2B_Obs_Exp.py
+
+# input 
+analyses/efficiency/ratio_df_Unit_v13.tab
+analyses/efficiency/Unit_v13_teff_results.tab
+metadata/chemostat_gene_relative_copy_number.tsv
+analyses/chemostat_deseq/DESeq_Obs_RNA_DGY1657_DGY1726.txt
+analyses/chemostat_deseq/DESeq_Obs_RNA_DGY1657_DGY1735.txt
+analyses/chemostat_deseq/DESeq_Obs_RNA_DGY1657_DGY1741.txt
+analyses/chemostat_deseq/DESeq_Obs_RNA_DGY1657_DGY1743.txt
+analyses/chemostat_deseq/DESeq_Exp_RNA_DGY1657_DGY1726.txt
+analyses/chemostat_deseq/DESeq_Exp_RNA_DGY1657_DGY1735.txt
+analyses/chemostat_deseq/DESeq_Exp_RNA_DGY1657_DGY1741.txt
+analyses/chemostat_deseq/DESeq_Exp_RNA_DGY1657_DGY1743.txt
+
+# output
+figures/_obs_rna_deseq_pval.pdf
+figures/_exp_rna_deseq_pval.pdf
+analyses/chemostat_deseq/DESeq_Obs_RNA_results.txt
+analyses/chemostat_deseq/DESeq_Obs_RPF_results.txt
+analyses/chemostat_deseq/DESeq_Exp_RNA_results.txt
 
 ### Generic stats tests
 Code contains small standalone tests like FET, HGM
