@@ -76,17 +76,20 @@ analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
 
 ```
 
-
-
-```
-
 ### Make Heatmap and cluster (Figure 2)
 Takes 
 
 ```{}
 build_expression_object_l1_v1.0.py
 
-# prod
+# input
+data/analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
+data/analyses/ms/Perseus_DA_Welchs_t-test_wFDR_edit.txt
+
+# output
+data/output/unit_object_level_Unit_l1_tests.tab
+figures/unit_object_select_24k_clust.pdf
+```
 
 ### Calculate Exp_RNA from Obs_RNA
 To calculate change in transcription efficiency we first calculate the expected RNA abundance given the observed abundance in the ancestor, multiplied by the copy_number in the evolved strain.
