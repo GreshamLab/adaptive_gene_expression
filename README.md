@@ -42,8 +42,51 @@ data/DESeq_Obs_RPF_DGY1657_DGY1741.txt
 data/DESeq_Obs_RPF_DGY1657_DGY1743.txt
 
 ```
-### Make Heatmap and cluster (Figure 2)
+### Build "Unit" object
+Certain modes of analysis require or are improved by the expression data being similarly scaled. To acheive this we first transform the data using Box-Cox Power Transform followed by a MinMax transform into the Unit range [0,1], (see Figure S5). Unit transformed data are used for Figures 2A and Supplemental Figure S3.
 
+```{}
+scale_data_v0.13_Unit_public.py
+
+# input
+analyses/chemostat_expression/expression_dict.tsv
+metadata/aa_protein_lengths.tsv
+metadata/chemostat_gene_relative_copy_number.tsv
+analyses/ms/DGY1726_v_DGY1657_wCON_wBatch_QN_p0.01.txt
+analyses/ms/DGY1735_v_DGY1657_wCON_wBatch_QN_p0.01.txt
+analyses/ms/DGY1741_v_DGY1657_wCON_wBatch_QN_p0.01.txt
+analyses/ms/DGY1743_v_DGY1657_wCON_wBatch_QN_p0.01.txt
+
+# output
+analyses/efficiency/ms_counts_expression.tsv
+analyses/efficiency/ratio_df_Unit_v13.tab
+```
+
+### Perform Unit Transform Test
+Unit transformed data are evaluated using the Unit transform test, described in Supplemental Figure 6, 7, 8, 9. The results of which inform the Protein Expression Efficieny analysis (Figure 4A).
+```{}
+unit_differential_v16_public.py
+
+# input
+analyses/efficiency/ratio_df_Unit_v13.tab
+
+# output
+analyses/efficiency/unit_object_level_1v13_Unit_10pct.tab
+analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
+
+```
+
+
+
+```
+
+### Make Heatmap and cluster (Figure 2)
+Takes 
+
+```{}
+build_expression_object_l1_v1.0.py
+
+# prod
 
 ### Calculate Exp_RNA from Obs_RNA
 To calculate change in transcription efficiency we first calculate the expected RNA abundance given the observed abundance in the ancestor, multiplied by the copy_number in the evolved strain.
