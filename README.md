@@ -1,11 +1,10 @@
-# Post_tRx
-A collection of code used in the analysis of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation"
-https://doi.org/10.1101/2023.10.20.563336
+# Supplemental Code for "Changes in gene expression at multiple levels in CNV containing adapted populations" 
+
 ---
 
 
 ## Introduction
-This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Post-transcriptional mechanisms modulate the consequences of adaptive copy number variation". All files are available in this repository, download unzip, and move all files into a 'data' directory to use the commands provided here.
+This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Changes in gene expression at multiple levels in CNV containing adapted populations". All files are available in this repository, download unzip, and move all files into a 'data' directory to use the commands provided here.
 
 ### Expression Alignment to Ensembl reference genome and reads per gene
 
@@ -43,24 +42,8 @@ data/DESeq_Obs_RPF_DGY1657_DGY1741.txt
 data/DESeq_Obs_RPF_DGY1657_DGY1743.txt
 
 ```
+### Make Heatmap and cluster (Figure 2)
 
-### Make robust scale heatmap
-```{}
-make_multilevel_heatmaps.py
-
-# these rely on: 
-data/chemostat_gene_relative_copy_number.tsv
-data/DGY1726_global_expression.tsv
-data/DGY1735_global_expression.tsv
-data/DGY1741_global_expression.tsv
-data/DGY1743_global_expression.tsv
-
-# these produce:
-heatmap_CNV_map.pdf
-Log2FC_map_GR_RNA_chrXI.pdf
-Log2FC_map_GR_RPF_chrXI.pdf
-Log2FC_map_GR_MS_chrXI.pdf
-```
 
 ### Calculate Exp_RNA from Obs_RNA
 To calculate change in transcription efficiency we first calculate the expected RNA abundance given the observed abundance in the ancestor, multiplied by the copy_number in the evolved strain.
@@ -91,6 +74,24 @@ data/DESeq_Exp_RNA_DGY1657_DGY1726.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1735.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1741.txt
 data/DESeq_Exp_RNA_DGY1657_DGY1743.txt
+```
+
+### Make robust scale heatmap
+```{}
+make_multilevel_heatmaps.py
+
+# these rely on: 
+data/chemostat_gene_relative_copy_number.tsv
+data/DGY1726_global_expression.tsv
+data/DGY1735_global_expression.tsv
+data/DGY1741_global_expression.tsv
+data/DGY1743_global_expression.tsv
+
+# these produce:
+heatmap_CNV_map.pdf
+Log2FC_map_GR_RNA_chrXI.pdf
+Log2FC_map_GR_RPF_chrXI.pdf
+Log2FC_map_GR_MS_chrXI.pdf
 ```
 
 ### Efficiency analysis 
