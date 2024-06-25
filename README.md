@@ -194,7 +194,7 @@ SSD1_motif_analysis_v2.py
 
 # input:
 analyses/ssd1/TL_from_SGD.tsv
-metadata/McManus_2018_saccharomyces_cerevisiae.gff
+metadata/McManus_2018_saccharomyces_cerevisiae.gff * (not included)
 SGD/S288C_reference_sequence_R64-2-1_20150113.fsa * (not included)
 
 # output
