@@ -2,7 +2,6 @@
 
 ---
 
-
 ## Introduction
 This is an orienting document intended to describe the codes used in the analysis of data for the publication of "Changes in gene expression at multiple levels in CNV containing adapted populations". All files are available in this repository, download unzip, and move all files into a 'data' directory to use the commands provided here.
 
@@ -46,7 +45,7 @@ data/DESeq_Obs_RPF_DGY1657_DGY1743.txt
 Certain modes of analysis require or are improved by the expression data being similarly scaled. To acheive this we first transform the data using Box-Cox Power Transform followed by a MinMax transform into the Unit range [0,1], (see Figure S5). Unit transformed data are used for Figures 2A and Supplemental Figure S3.
 
 ```{}
-scale_data_v0.13_Unit_public.py
+scale_data_v0.13_Unit.py
 
 # input
 analyses/chemostat_expression/expression_dict.tsv
@@ -65,7 +64,7 @@ analyses/efficiency/ratio_df_Unit_v13.tab
 ### Perform Unit Transform Test
 Unit transformed data are evaluated using the Unit transform test, described in Supplemental Figure 6, 7, 8, 9. The results of which inform the Protein Expression Efficieny analysis (Figure 4A).
 ```{}
-unit_differential_v16_public.py
+unit_differential_v16.py
 
 # input
 analyses/efficiency/ratio_df_Unit_v13.tab
@@ -81,7 +80,7 @@ Takes Unit transformed expression data, builds
 
 ```{}
 build_expression_object_l1_v1.0.py
-heatmap_v2_l1_public.r
+heatmap_v2_l1.r
 
 # input
 data/analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
@@ -161,63 +160,84 @@ figures/_exp_rna_deseq_pval.pdf
 analyses/chemostat_deseq/DESeq_Obs_RNA_results.txt
 analyses/chemostat_deseq/DESeq_Obs_RPF_results.txt
 analyses/chemostat_deseq/DESeq_Exp_RNA_results.txt
+```
+### Calculate linear regression and standardized residuals
+
+```{}
+plot_unit_level_2_sres_peff.r
+
+input:
+analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
+
+output:
+figures/_ms_rpf_l2_peff.pdf
+analyses/efficiency/unit_object_level2_ms_rpf_16_Unit_Sres_fdr.csv
+
+### Plot translation efficiency and protein expression efficiency 
+
+```{}
+plot_teff_peff_v5.py
+
+# input:
+metadata/chemostat_gene_relative_copy_number.tsv
+analyses/efficiency/Unit_v13_teff_results.tab
+
+# output:
+figures/_sig_teff_efficiency_pval.pdf
+figures/_sig_peff_efficiency_pval.pdf
+```
+
+### SSD1 binding site motif analysis
+
+```{}
+SSD1_motif_analysis_v2.py
+
+# input:
+analyses/ssd1/TL_from_SGD.tsv
+metadata/McManus_2018_saccharomyces_cerevisiae.gff
+SGD/S288C_reference_sequence_R64-2-1_20150113.fsa * (not included)
+
+# output
+analyses/ssd1/TL_from_SN.bed
+analyses/ssd1/TL_from_SGD_SN.fa
+analyses/ssd1/_SSD1_hits_in_TL_from_SGD_SN.txt
+analyses/ssd1/_SSD1_in_TL_from_SGD_SN.bed
+analyses/ssd1/_SSD1_random_random_control_in_TL_from_SGD_SN.bed
+```
+### Plot Translation efficiency and SSD1 binding motif enrichment
+
+```{}
+plot_teff_ssd1.py
+
+# input
+analyses/efficiency/unit_object_level_2v13v16_Unit_10pct.tab
+_predictions_0.5.bed * [from uorfish]
+analyses/efficiency/Unit_v13_teff_results.tab
+analyses/ssd1/SSD1_hits_in_TL_from_SGD_SN.txt
+
+# output
+figures/teff_ssd1_efficiency_pval.pdf
+all_strain_teff_cnv_ssd1_efficiency_pval.pdf
+```
+
+### Plot Protein expression efficiency and protein complex enrichment
+
+```{}
+plot_peff_complexes.py
+
+# input:
+analyses/efficiency/unit_object_level2_ms_rpf_16_Unit_Sres_fdr.csv
+metadata/chemostat_gene_relative_copy_number.tsv
+analyses/complexes/table_of_complexes.csv
+
+# output:
+figures/_background_peff_efficiency_pval.pdf
+```
 
 ### Generic stats tests
 Code contains small standalone tests like FET, HGM
 ```{}
-generic_stats_tests.py
-```
+HGM_calc.py
 
-### Convert RPF to P-site fractions
-Ribosome reading frames can be estimated by calculating the P-site (Ingolia et al. 2009) However, not all RPFs are the ideal 28nt fragment size, be it do to altered confirmation, over- or incomplete digestion, or enzymatic addition of nucleotides during library construction. As such for non-ideal fragment sizes a fraction of the ribosome is assigned to possible positions (Spealman and Naik et al. 2018). 
-```{}
-convert_to_psite.py
-
-# this is invoked as:
-strain=DGY1657
-	rep=R1
-		python convert_to_psite.py -i RPF_${strain}_${rep}.sorted.sam -o RPF_${strain}_${rep}
-
-# this relies on:
-RPF_${strain}_${rep}.sorted.sam STAR aligned RPFs, samtools sorted
-
-#this produces:
-RPF_${strain}_${rep}.bedgrahp
-```
-
-### SSD1 motif analysis
-```{}
-motif_analysis.py
-
-# this relies on:
-data/Spealman_Naik_2018_saccharomyces_cerevisiae.gff
-data/TL_from_SGD.tsv
-data/TL_from_SN.fa
-
-#this produces:
-data/TL_from_SN.bed
-data/TL_from_SGD_SN.fa
-data/SSD1_hits_in_TL_from_SGD_SN.txt
-```
-
-### Violin plot for Figure 5C 
-Make violin plot of SSD1 motif Observed-Expected
-
-```{}
-violin_ssd1_uorf.py
-
-# this relies on: 
-data/hist_xeff_1e2_uORF.txt
-data/hist_xeff_1e2_not_sig_uORF.txt
-data/hist_xeff_1e2_no_uORF.txt
-data/hist_xeff_1e2_sig.txt
-data/hist_xeff_1e2.txt
-data/hist_Bayne_SSD1_uORFs_targets.txt
-data/hist_Bayne_SSD1_targets.txt
-data/hist_all_SSD1_targets.txt
-data/hist_YKL_all.txt
-
-#Figures: 
-hist_SSD1_uORF.pdf
 ```
 
