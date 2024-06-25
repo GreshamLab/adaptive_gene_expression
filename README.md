@@ -26,19 +26,19 @@ DESeq_difObs_RNA_v1.1.R
 DESeq_difObs_RPF_v1.1.R
 
 # these rely on: 
-data/RNA_unnormed_read_counts_by_gene.tsv
-data/RPF_unnormed_read_counts_by_gene.tsv
+analyses/chemostat_expression/RNA_unnormed_read_counts_by_gene.tsv
+analyses/chemostat_expression/RPF_unnormed_read_counts_by_gene.tsv
 
 # these produce:
-data/DESeq_Obs_RNA_DGY1657_DGY1726.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1735.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1741.txt
-data/DESeq_Obs_RNA_DGY1657_DGY1743.txt
+analyses/deseq/DESeq_Obs_RNA_DGY1657_DGY1726.txt
+analyses/deseq/DESeq_Obs_RNA_DGY1657_DGY1735.txt
+analyses/deseq/DESeq_Obs_RNA_DGY1657_DGY1741.txt
+analyses/deseq/DESeq_Obs_RNA_DGY1657_DGY1743.txt
 #
-data/DESeq_Obs_RPF_DGY1657_DGY1726.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1735.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1741.txt
-data/DESeq_Obs_RPF_DGY1657_DGY1743.txt
+analyses/deseq/DESeq_Obs_RPF_DGY1657_DGY1726.txt
+analyses/deseq/DESeq_Obs_RPF_DGY1657_DGY1735.txt
+analyses/deseq/DESeq_Obs_RPF_DGY1657_DGY1741.txt
+analyses/deseq/DESeq_Obs_RPF_DGY1657_DGY1743.txt
 
 ```
 ### Build "Unit" object
@@ -104,7 +104,7 @@ metadata/Transposable_elements_rDNA.txt
 data/analyses/chemostat_expression/RNA_unnormed_read_counts_by_gene.tsv
 
 #this produces: 
-data/combined_coverage_table_expected.tsv
+analyses/chemostat_expression/combined_coverage_table_expected.tsv
 ```
 
 ### DESeq2 performed on Obs_RNA versus Exp_RNA 
@@ -114,13 +114,13 @@ To identify genes with different relative abundances DESeq2 was ran on copy-numb
 DESeq_difExp_RNA_v1.1.R
 
 # input
-data/combined_coverage_table_expected.tsv
+analyses/chemostat_expression/combined_coverage_table_expected.tsv
 
 # output
-data/DESeq_Exp_RNA_DGY1657_DGY1726.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1735.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1741.txt
-data/DESeq_Exp_RNA_DGY1657_DGY1743.txt
+analyses/deseq/DESeq_Exp_RNA_DGY1657_DGY1726.txt
+analyses/deseq/DESeq_Exp_RNA_DGY1657_DGY1735.txt
+analyses/deseq/DESeq_Exp_RNA_DGY1657_DGY1741.txt
+analyses/deseq/DESeq_Exp_RNA_DGY1657_DGY1743.txt
 ```
 
 ### Perform Fisher Exact Test on translation efficiency ratios
@@ -217,7 +217,7 @@ analyses/ssd1/SSD1_hits_in_TL_from_SGD_SN.txt
 
 # output
 figures/teff_ssd1_efficiency_pval.pdf
-all_strain_teff_cnv_ssd1_efficiency_pval.pdf
+figures/all_strain_teff_cnv_ssd1_efficiency_pval.pdf
 ```
 
 ### Plot Protein expression efficiency and protein complex enrichment
