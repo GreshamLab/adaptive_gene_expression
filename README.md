@@ -1,4 +1,4 @@
-# Supplemental Code for "Changes in gene expression at multiple levels in CNV containing adapted populations" 
+# Supplemental Code for "Multilevel gene expression changes in lineages containing adaptive copy number variants" 
 
 ---
 
